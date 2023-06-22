@@ -8,8 +8,6 @@ inputs:
     required: true
   paths:
     required: true
-  command:
-    required: true
   zip-option:
     required: false
     default: -ryq
@@ -21,7 +19,9 @@ inputs:
     default: ./
 runs:
   using: node12
-  main: dist/index.js
+  main: dist/restore/index.js
+  post: dist/save/index.js
+  post-if: always()
 branding:
   icon: package
   color: yellow

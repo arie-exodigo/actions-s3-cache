@@ -1,6 +1,6 @@
 {
   "name": "actions-s3-cache",
-  "main": "index.js",
+  "main": "save.js",
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
