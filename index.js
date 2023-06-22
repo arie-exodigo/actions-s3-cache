@@ -20,35 +20,37 @@ async function run() {
     const s3 = new AWS.S3();
 
     s3.getObject({
-        Bucket: s3Bucket,
-        Key:fileName
-      }, async (err, data) => {
-        if (err) {
-          console.log(`No cache is found for key: ${fileName}, ${err}`);
+      Bucket: s3Bucket,
+      Key: fileName
+    }, async (err, data) => {
+      if (err) {
+        console.log(`No cache is found for key: ${fileName}`);
 
-          await exec.exec(command); // install or build command e.g. npm ci, npm run dev
-          await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
+        await exec.exec(command); // install or build command e.g. npm ci, npm run dev
+        await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
 
-          s3.upload({
-              Body: fs.readFileSync(fileName),
-              Bucket: s3Bucket,
-              Key: fileName,
-            }, (err, data) => {
-              if (err) {
-                console.log(`Failed store to ${fileName}, ${err}`);
-              } else {
-                console.log(`Stored cache to ${fileName}`);
-              }
-            }
-          );
-
-        } else {
-          console.log(`Found a cache for key: ${fileName}`);
-          fs.writeFileSync(fileName, data.Body);
-
-          await exec.exec(`unzip ${unzipOption} ${fileName}`);
-          await exec.exec(`rm -f ${fileName}`);
+        s3.upload({
+          Body: fs.readFileSync(fileName),
+          Bucket: s3Bucket,
+          Key: fileName,
+        }, (err, data) => {
+          if (err) {
+            console.log(`Failed store to ${fileName}, ${err}`);
+          } else {
+            console.log(`Stored cache to ${fileName}`);
+          }
         }
+        );
+
+      } else {
+        console.log(`Found a cache for key: ${fileName}`);
+        fs.writeFileSync(fileName, data.Body);
+
+        await exec.exec(`unzip ${unzipOption} ${fileName}`);
+        await exec.exec(`rm -f ${fileName}`);
+
+        await exec.exec(command); // install or build command e.g. npm ci, npm run dev
+      }
     });
 
   }

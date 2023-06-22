@@ -15,7 +15,7 @@ inputs:
     default: -ryq
   unzip-option:
     required: false
-    default: -n
+    default: -nqq
   working-directory:
     required: false
     default: ./
