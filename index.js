@@ -24,7 +24,7 @@ async function run() {
         Key:fileName
       }, async (err, data) => {
         if (err) {
-          console.log(`No cache is found for key: ${fileName}`);
+          console.log(`No cache is found for key: ${fileName}, ${err}`);
 
           await exec.exec(command); // install or build command e.g. npm ci, npm run dev
           await exec.exec(`zip ${zipOption} ${fileName} ${paths}`);
@@ -35,7 +35,7 @@ async function run() {
               Key: fileName,
             }, (err, data) => {
               if (err) {
-                console.log(`Failed store to ${fileName}`);
+                console.log(`Failed store to ${fileName}, ${err}`);
               } else {
                 console.log(`Stored cache to ${fileName}`);
               }
